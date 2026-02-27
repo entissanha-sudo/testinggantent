@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permintaan Maaf</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background:black;
+    color:white;
+}
+
+/* LOADING SCREEN */
+#loading{
+    position:fixed;
+    inset:0;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:9999;
+    color:#ff4fd8;
+    font-family:monospace;
+}
+
+.loader-text{
+    font-size:20px;
+    margin-top:10px;
+    animation:blink 1s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0;}
+}
+
+/* MAIN */
+#main{
+    display:none;
+    height:100vh;
+    justify-content:center;
+    align-items:center;
+}
+
+/* MATRIX */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+
+.card{
+    background:rgba(0,0,0,0.65);
+    backdrop-filter: blur(10px);
+    padding:40px;
+    border-radius:20px;
+    max-width:650px;
+    text-align:center;
+    box-shadow:0 0 30px rgba(255,0,170,0.7);
+}
+
+/* GLITCH */
+.glitch{
+    font-size:32px;
+    font-weight:bold;
+    color:#ff4fd8;
+    animation:glitch 1s infinite;
+}
+
+@keyframes glitch{
+    0%{text-shadow:2px 2px #ff00c8,-2px -2px #00fff7;}
+    50%{text-shadow:-2px 2px #ff00c8,2px -2px #00fff7;}
+    100%{text-shadow:2px -2px #ff00c8,-2px 2px #00fff7;}
+}
+
+button{
+    margin-top:25px;
+    padding:14px 30px;
+    border:none;
+    border-radius:12px;
+    background:#ff4fd8;
+    color:white;
+    font-size:17px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    transform:scale(1.08);
+    background:#ff2ec4;
+}
+
+.thanks{
+    margin-top:20px;
+    font-weight:bold;
+    font-size:20px;
+    opacity:0;
+    transition:1s;
+}
+
+.show{opacity:1;}
+
+.confetti{
+    position:fixed;
+    width:10px;
+    height:10px;
+    top:-10px;
+    animation:fall linear forwards;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(720deg);
+        opacity:0;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+    <div>𝗧𝗨𝗡𝗚𝗚𝗨 𝗕𝗔𝗡𝗚 𝗕𝗟𝗢𝗡𝗭, 𝗟𝗢𝗔𝗗𝗜𝗡𝗚</div>
+    <div class="loader-text">𝗗𝗜𝗞𝗜𝗧 𝗟𝗔𝗚𝗜</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+    <canvas id="matrix"></canvas>
+
+    <div class="card">
+        <div class="glitch">𝗣𝗘𝗥𝗠𝗜𝗡𝗧𝗔𝗔𝗡 𝗠𝗔𝗔𝗙 𝗗𝗔𝗥𝗜 𝗭𝗘𝗥𝗢</div>
+
+        <p>
+            𝗔𝗦𝗔𝗟𝗔𝗠𝗨𝗔𝗟𝗔𝗜𝗞𝗨𝗠 𝗪𝗥. 𝗪𝗕, 𝗦𝗛𝗔𝗟𝗢𝗠, 𝗦𝗘𝗟𝗔𝗠𝗔𝗧 𝗦𝗜𝗔𝗡𝗚 𝗠𝗘𝗡𝗝𝗘𝗟𝗔𝗡𝗚 𝗕𝗨𝗞𝗔.
+            𝗦𝗔𝗬𝗔 𝗭𝗘𝗥𝗢 𝗠𝗘𝗠𝗜𝗡𝗧𝗔 𝗠𝗔𝗔𝗙 𝗞𝗔𝗥𝗘𝗡𝗔 𝗧𝗘𝗟𝗔𝗛 𝗠𝗘𝗡𝗚𝗘𝗗𝗜𝗧 𝗠𝗨𝗞𝗔 𝗕𝗔𝗡𝗚 𝗕𝗟𝗢𝗡𝗭,
+            𝗦𝗔𝗬𝗔 𝗠𝗘𝗪𝗔𝗞𝗜𝗟𝗜 𝗙𝗟𝗨𝗙𝗙𝗬 𝗛𝗔𝗠𝗔 𝗜𝗡𝗚𝗜𝗡 𝗠𝗘𝗠𝗜𝗡𝗧𝗔 𝗠𝗔𝗔𝗙.
+        </p>
+
+        <button onclick="maafkan()">Saya Memaafkan</button>
+        <div class="thanks" id="thanks">🎉 AKSES DITERIMA — MAAF DITERIMA 🎉</div>
+    </div>
+</div>
+
+<audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="clap">
+    <source src="https://www.soundjay.com/human/applause-8.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="type">
+    <source src="https://www.soundjay.com/mechanical/keyboard-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+setTimeout(()=>{
+    document.getElementById("loading").style.display="none";
+    document.getElementById("main").style.display="flex";
+},3000);
+
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+const letters="01 ZERO HACK ";
+const fontSize=16;
+const columns=canvas.width/fontSize;
+const drops=[];
+
+for(let x=0;x<columns;x++) drops[x]=1;
+
+function draw(){
+    ctx.fillStyle="rgba(0,0,0,0.05)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle="#ff4fd8";
+    ctx.font=fontSize+"px monospace";
+
+    for(let i=0;i<drops.length;i++){
+        const text=letters[Math.floor(Math.random()*letters.length)];
+        ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+        if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+            drops[i]=0;
+
+        drops[i]++;
+    }
+}
+setInterval(draw,33);
+
+function maafkan(){
+    document.getElementById("thanks").classList.add("show");
+    document.getElementById("clap").play();
+    document.getElementById("type").play();
+    confettiBurst();
+}
+
+function confettiBurst(){
+    for(let i=0;i<100;i++){
+        let conf=document.createElement("div");
+        conf.classList.add("confetti");
+        document.body.appendChild(conf);
+
+        conf.style.left=Math.random()*100+"vw";
+        conf.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+        conf.style.animationDuration=(Math.random()*2+3)+"s";
+
+        setTimeout(()=>{conf.remove();},5000);
+    }
+}
+</script>
+
+</body>
+</html>
